@@ -49,9 +49,9 @@ class MyStatePaint extends CustomPainter {
     maxLength = totalWidth * 0.9;
   }
 
-  final double spaceBetweenTwoRectangles = 28;
-  final double yShift = 50;
-  final double xShift = 70;
+  final double spaceBetweenTwoRectangles = 26;
+  final double yShift = 55;
+  final double xShift = 80;
   // define text painter to paint text (write text)
   final TextPainter textPainter = TextPainter(
     textAlign: TextAlign.center,
@@ -62,8 +62,8 @@ class MyStatePaint extends CustomPainter {
     fontSize: 22.0,
   );
   final TextStyle textStyleLabel = GoogleFonts.bebasNeue(
-    color: MyColor.orangeText,
-    fontSize: 26.0,
+    color: MyColor.yellow_accent,
+    fontSize: 22.0,
   );
 
   final TextStyle textStyleDrawLine = GoogleFonts.nunito(
@@ -97,7 +97,7 @@ class MyStatePaint extends CustomPainter {
             Rectangle(
                 position: currentState[i].position,
                 length: currentState[i].length,
-                color: i==index? MyColor.green_araconda : MyColor.orang3,
+                color: i==index? MyColor.yellow : MyColor.white,
                 value: currentState[i].value,
                 maxValue: maxValue,
                 label: currentState[i].label,
@@ -147,7 +147,7 @@ class MyStatePaint extends CustomPainter {
       text: title,
       style: titleTextStyle ?? textStyleBold,
     );
-    double x = totalWidth / 2;
+    double x = totalWidth / 2 ;
     double y = -60;
     canvas.save();
     textPainter.layout();
@@ -155,7 +155,7 @@ class MyStatePaint extends CustomPainter {
     textPainter.paint(
       canvas,
       Offset(
-        -textPainter.width / 2,
+        -textPainter.width / 2 ,
         -textPainter.height / 2,
       ),
     );
@@ -177,9 +177,7 @@ class MyStatePaint extends CustomPainter {
 
     // draw rectangle
     Path path = Path();
-    double maxHeight =
-        numberOfRactanglesToShow * (rectHeight + spaceBetweenTwoRectangles) -
-            spaceBetweenTwoRectangles;
+    double maxHeight = numberOfRactanglesToShow * (rectHeight + spaceBetweenTwoRectangles) - spaceBetweenTwoRectangles;
     // define postitons of the four corner to draw the rectangle
     double x1 = 0,
         y1 = rect.position * (rectHeight + spaceBetweenTwoRectangles);

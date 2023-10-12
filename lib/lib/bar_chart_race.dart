@@ -72,7 +72,7 @@ class BarChartRace extends StatefulWidget {
     Key? key,
     required this.data,
     required this.selectedIndex,
-     this.index,
+    this.index,
     required this.initialPlayState,
     this.framesPerSecond = 20,
     this.framesBetweenTwoStates = 40,
@@ -134,52 +134,55 @@ class _BarChartRaceState extends State<BarChartRace> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final double paddingVer = 64.0;
+    final double paddingHoz = 64.0;
+
     return Scaffold(
-      body:
-      Container(
-            height: height,
-            width: width,
-            decoration: const BoxDecoration(
-              // gradient: LinearGradient(
-              //   begin: Alignment.topCenter,
-              //   end: Alignment.bottomCenter,
-              //   colors: [
-              //     Colors.black,
-              //     Colors.black87,
-              //   ],
-              //   stops: [
-              //     0.0,
-              //     0.75,
-              //   ], // Adjust the stops to control the gradient effect
-              // ),
-              image: DecorationImage(
-                filterQuality: FilterQuality.low,
-                image: AssetImage('asset/image/210912_rotate.jpeg'),
-                fit: BoxFit.cover, // Make the image cover the entire container
-              ),
-            ),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 84,
-              vertical: 84,
-            ),
-            child: LayoutBuilder(
-              builder: (_, constraints) => CustomPaint(
-                painter: MyStatePaint(
-                  index: widget.index,
-                  currentState: currentData!,
-                  numberOfRactanglesToShow: widget.numberOfRactanglesToShow,
-                  // rectHeight: widget.rectangleHeight,
-                  rectHeight: 42.5,
-                  maxValue: currentData![0].maxValue,
-                  totalWidth: constraints.maxWidth * .9,
-                  title: widget.title,
-                  titleTextStyle: widget.titleTextStyle,
-                  maxLength: null,
-                ),
-              ),
+      body: Container(
+        height: height,
+        width: width,
+        decoration: const BoxDecoration(
+          // color:MyColor.bedge,
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.black,
+              Colors.black87,
+            ],
+            stops: [
+              0.0,
+              0.75,
+            ], // Adjust the stops to control the gradient effect
+          ),
+          // image: DecorationImage(
+          //   filterQuality: FilterQuality.low,
+          //   image: AssetImage('asset/bg1.png'),
+          //   fit: BoxFit.cover, // Make the image cover the entire container
+          // ),
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: paddingHoz,
+          vertical: paddingVer,
+        ),
+        child: LayoutBuilder(
+          builder: (_, constraints) => CustomPaint(
+            painter: MyStatePaint(
+              index: widget.index,
+              currentState: currentData!,
+              numberOfRactanglesToShow: widget.numberOfRactanglesToShow,
+              // rectHeight: widget.rectangleHeight,
+              rectHeight: 38.5,
+              maxValue: currentData![0].maxValue,
+              totalWidth: constraints.maxWidth * .9,
+              title: widget.title,
+              titleTextStyle: widget.titleTextStyle,
+              maxLength: null,
             ),
           ),
-      
+        ),
+      ),
+
       //  Stack(
       //   alignment: Alignment.center,
       //   children: [
@@ -404,7 +407,7 @@ class _BarChartRaceState extends State<BarChartRace> {
           value: data[i][index],
           color: widget.columnsColor == null
               ? index != widget.index
-                  ? MyColor.orang3
+                  ? MyColor.white
                   : MyColor.green_araconda
               : widget.columnsColor![index],
           stateLabel: widget.statesLabel[i],

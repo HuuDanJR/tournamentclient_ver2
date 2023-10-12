@@ -79,6 +79,8 @@ flutter:
 
     - asset/video.json
     - asset/video_reduce.mp4
+    - asset/bg.png
+    - asset/bg1.png
 
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see

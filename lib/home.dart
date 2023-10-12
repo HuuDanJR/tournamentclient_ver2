@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:tournament_client/home_future.dart';
 import 'package:tournament_client/lib/bar_chart.widget.dart';
 import 'package:tournament_client/lib/bar_chart_race.dart';
 import 'package:tournament_client/lib/getx/controller.get.dart';
@@ -41,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     //gerenate data
-    // generateGoodRandomData(3, 10);
+    generateGoodRandomData(2, 10);
     // generateGoodRandomData2(3, 10);
 
     super.initState();
@@ -134,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
+      body: SafeArea(
       child: StreamBuilder<List<Map<String, dynamic>>>(
         stream: _streamController.stream,
         builder: (context, snapshot) {
@@ -170,8 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         selectedIndex: widget.selectedIndex,
                         // index: 1,
                         // index: selectedIndex,
-                        index: detect(
-                            widget.selectedIndex!.toDouble(), formattedData[0]),
+                        index: detect(widget.selectedIndex!.toDouble(), formattedData[0]),
                         data: convertData(formattedData),
                         // data: generateGoodRandomData2(2, 6),
                         initialPlayState: true,
@@ -181,7 +181,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         framesPerSecond: 40,
                         framesBetweenTwoStates: 40,
                         numberOfRactanglesToShow: formattedData[0].length,
-                        title: "DYNAMIC RANKING",
+                        title: "TOURNAMENT LEADER BOARD",
                         // columnsLabel: [
                         //   "1232123132141",
                         //   "3123",
@@ -194,10 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         //   "Netflix",
                         //   "Facebook",
                         // ],
-                        columnsLabel: formattedData[0]
-                            .map((value) =>
-                                'PLAYER ${value < 10 ? '0$value' : value.toStringAsFixed(0)}')
-                            .toList(),
+                        columnsLabel: formattedData[0].map((value) =>'PLAYER ${value < 10 ? '0$value' : value.toStringAsFixed(0)}').toList(),
                         statesLabel: List.generate(
                           30,
                           (index) => formatDate(
@@ -208,30 +205,18 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         titleTextStyle: GoogleFonts.nunitoSans(
                           color: Colors.white,
-                          fontSize: 36,
+                          fontSize: 26,
                         ),
                       ),
                       Positioned(
-                          bottom: 24,
-                          right: 24,
+                          bottom: 12,
+                          right: 12,
                           child: widget.selectedIndex==111111?Container(): Text('YOU ARE PLAYER ${widget.selectedIndex}',
                               style: const TextStyle(
                                 color: MyColor.white,
                                 fontSize: 24,
                               ))),
-                      Positioned(
-                          top: 12,
-                          left: 12,
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: 135,
-                            height: 55,
-                            decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                    image:
-                                        AssetImage('asset/image/logo_new.png'),
-                                    fit: BoxFit.contain)),
-                          )),
+                     
                     ],
                   )),
             );
@@ -275,17 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-List<List<double>> convertData(data) {
-  if (data.length == 2) {
-    // print('convert data 2 : $data ');
-    return [data.last];
-  } else if (data.length == 3) {
-    // print('convert data 3: $data ');
-    return [data[1], data.last];
-  }
-  print('convert data : $data ');
-  return data;
-}
+
 
 class FormattedDataText extends StatelessWidget {
   final List<List<double>> formattedData;
@@ -321,15 +296,7 @@ List<Color> changeList(int index) {
   return colorList;
 }
 
-int detect(double targetIndex, List<double> myList) {
-  for (int i = 0; i < myList.length; i++) {
-    if (myList[i] == targetIndex) {
-      // print('index $i');
-      return i;
-    }
-  }
-  return -1; // Return -1 if the index is not found in the list
-}
+
 
 List<Color> shuffleColorList() {
   final random = Random();
