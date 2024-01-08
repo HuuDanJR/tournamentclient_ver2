@@ -10,7 +10,7 @@ Widget loadingbackground({Future<LottieComposition>? composition, width, height}
       if (composition != null) {
         return Lottie(
             repeat: true,
-            fit: BoxFit.fitWidth,
+            fit: BoxFit.cover,
             width: width,
             height: height,
             composition: composition);

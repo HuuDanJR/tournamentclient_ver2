@@ -4,13 +4,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+// ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:tournament_client/lib/bar_chart.widget.dart';
 import 'package:tournament_client/lib/bar_chart_race.dart';
 import 'package:tournament_client/utils/mycolors.dart';
 
 class MyHomeFuture extends StatefulWidget {
-  const MyHomeFuture({super.key, required this.title});
+  const MyHomeFuture({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -27,10 +28,10 @@ class _MyHomeFutureState extends State<MyHomeFuture> {
     });
     
     socket.onConnect((_) {
-      print('Connected to server');
+      debugPrint('Connected to server');
     });
     socket.onDisconnect((_) {
-      print('Disconnected from server');
+      debugPrint('Disconnected from server');
     });
     
     socket.connect(); // Await the connection
@@ -52,7 +53,7 @@ class _MyHomeFutureState extends State<MyHomeFuture> {
               }
             }
             stationData.add(doubleList);
-            print('stationData: $stationData');
+            // print('stationData: $stationData');
           }
         }
 
@@ -171,7 +172,7 @@ List<List<double>> convertData(data) {
 class FormattedDataText extends StatelessWidget {
   final List<List<double>> formattedData;
 
-  const FormattedDataText({super.key, required this.formattedData});
+  const FormattedDataText({Key? key, required this.formattedData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -199,14 +200,14 @@ List<Color> changeList(int index) {
 
   List<Color> colorList = List.generate(10, (i) => MyColor.orang3);
   colorList[index] = MyColor.green_araconda;
-  print(colorList);
+  // print(colorList);
   return colorList;
 }
 
 int detect(double targetIndex, List<double> myList) {
   for (int i = 0; i < myList.length; i++) {
     if (myList[i] == targetIndex) {
-      print('index $i');
+      print('index in detect function $i');
       return i;
     }
   }

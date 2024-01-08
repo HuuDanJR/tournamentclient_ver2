@@ -19,7 +19,8 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.6 <4.0.0"
+  # sdk: ">=3.0.6 <4.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -32,7 +33,7 @@ dependencies:
   chewie: ^1.7.1
   collection: ^1.17.0
   cupertino_icons: ^1.0.2
-  dio: ^5.3.2
+  dio: ^5.3.3
   flutter:
     sdk: flutter
   fluttertoast: ^8.2.2
@@ -41,7 +42,6 @@ dependencies:
   intl: ^0.18.1
   lottie: ^2.6.0
   socket_io_client: ^2.0.3+1
-  syncfusion_flutter_charts: ^22.2.9
   video_player: ^2.7.2
 
 dev_dependencies:
@@ -77,10 +77,22 @@ flutter:
     - asset/image/210912_rotate.jpeg
     - asset/image/210912_rotate2.jpeg
 
-    - asset/video.json
-    - asset/video_reduce.mp4
+    - asset/lottie.json
+    - asset/lottie2.json
+    - asset/lottie3.json
+    - asset/lottie4.json
+    - asset/video_fixed.mp4
+    - asset/video_fixed_short.mp4
+    - asset/video_final.mp4
+    - asset/video_full.mp4
+    - asset/bg_video.mp4
     - asset/bg.png
     - asset/bg1.png
+    - asset/bg.jpg
+    - asset/bg1.jpg
+    - asset/bg2.jpg
+    - asset/bg3.jpg
+    - asset/bg4.jpg
 
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,11 +1,12 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tournament_client/utils/mycolors.dart';
-import 'package:tournament_client/widget/loading_indicator.dart';
+// ignore: unused_import
 import 'package:tournament_client/widget/loadingbackground.dart';
 import 'package:video_player/video_player.dart';
-import 'package:chewie/chewie.dart';
+// import 'package:chewie/chewie.dart';
 
 class TournamentPage extends StatefulWidget {
   const TournamentPage({Key? key}) : super(key: key);
@@ -18,7 +19,6 @@ class _TournamentPageState extends State<TournamentPage> {
   late final Future<LottieComposition> _composition;
   final String lottiePath = 'asset/video.json';
   late VideoPlayerController _videoPlayerController;
-  late ChewieController _chewieController;
 
   @override
   void initState() {
@@ -57,7 +57,7 @@ class _TournamentPageState extends State<TournamentPage> {
       body: Container(
         width:width,height:height,
         color:MyColor.bedge,
-        child: Stack(
+        child:  const Stack(
           children: [
             // Background Lottie
             // loadingbackground(composition: _composition,width:width,height:height)

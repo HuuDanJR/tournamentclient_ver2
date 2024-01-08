@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tournament_client/lib/models/rectangle.dart';
@@ -46,24 +47,29 @@ class MyStatePaint extends CustomPainter {
     linePaint.strokeWidth = .5;
     linePaint.strokeCap = StrokeCap.round;
 
-    maxLength = totalWidth * 0.9;
+    maxLength = kIsWeb? totalWidth * 0.875 :  totalWidth * 0.835;
   }
-
-  final double spaceBetweenTwoRectangles = 26;
+  //TABLEt
+  final double spaceBetweenTwoRectangles =kIsWeb? 34 : 22;
+  // final double spaceBetweenTwoRectangles = 22;
+  // final double spaceBetweenTwoRectangles = 36;
   final double yShift = 55;
   final double xShift = 80;
   // define text painter to paint text (write text)
+
+  
+
   final TextPainter textPainter = TextPainter(
     textAlign: TextAlign.center,
     textDirection: TextDirection.ltr,
   );
   final TextStyle textStyle = GoogleFonts.bebasNeue(
     color: MyColor.white,
-    fontSize: 22.0,
+    fontSize:kIsWeb? 29 : 24.0,
   );
   final TextStyle textStyleLabel = GoogleFonts.bebasNeue(
-    color: MyColor.yellow_accent,
-    fontSize: 22.0,
+    color: MyColor.red_text2,
+    fontSize:kIsWeb ? 29: 24.0,
   );
 
   final TextStyle textStyleDrawLine = GoogleFonts.nunito(
@@ -78,7 +84,7 @@ class MyStatePaint extends CustomPainter {
   );
   final TextStyle textStyleBold = GoogleFonts.playfairDisplay(
     color: Colors.black,
-    fontSize: 18.0,
+    fontSize: kIsWeb? 24 : 18.0,
     textBaseline: TextBaseline.alphabetic,
     fontWeight: FontWeight.bold,
   );
@@ -104,7 +110,6 @@ class MyStatePaint extends CustomPainter {
                 stateLabel: currentState[i].stateLabel),
                 canvas
       );
-     
     }
 
     // draw current state label
@@ -148,10 +153,14 @@ class MyStatePaint extends CustomPainter {
       style: titleTextStyle ?? textStyleBold,
     );
     double x = totalWidth / 2 ;
-    double y = -60;
+    double y = -40;
+    // double y = -50;
+    // double y = -60;
     canvas.save();
     textPainter.layout();
-    canvas.translate(x, y + 9);
+    canvas.translate(x, y);
+    // canvas.translate(x, y + 2.5);
+    // canvas.translate(x, y + 9);
     textPainter.paint(
       canvas,
       Offset(
@@ -199,12 +208,14 @@ class MyStatePaint extends CustomPainter {
       value = "${value.substring(0, 5)}..";
     }
     textPainter.text = TextSpan(
+      // text: '\$${(double.parse(value)).toStringAsFixed((double.parse(value)).truncateToDouble() == double.parse(value) ? 0 : 2)}',
       text: '\$${(double.parse(value))}',
       style: textStyleLabel,
     );
     canvas.save();
     textPainter.layout();
-    canvas.translate(x2, y1 + 9);
+    canvas.translate(x2, y1 +3.5);
+    // canvas.translate(x2, y1 + 9);
     textPainter.paint(
       canvas,
       const Offset(
@@ -225,7 +236,8 @@ class MyStatePaint extends CustomPainter {
     );
     canvas.save();
     textPainter.layout();
-    canvas.translate(0 - 9, y1 + 9);
+    canvas.translate(0 - 9, y1 + 3.5);
+    // canvas.translate(0 - 9, y1 + 9);
     textPainter.paint(
       canvas,
       Offset(

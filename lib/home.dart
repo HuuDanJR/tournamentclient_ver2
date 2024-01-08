@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
-import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,17 +11,17 @@ import 'package:tournament_client/lib/bar_chart.widget.dart';
 import 'package:tournament_client/lib/bar_chart_race.dart';
 import 'package:tournament_client/lib/getx/controller.get.dart';
 import 'package:tournament_client/utils/mycolors.dart';
+import 'package:tournament_client/utils/mystring.dart';
 import 'package:tournament_client/widget/snackbar.custom.dart';
 import 'dart:math' as math;
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage(
-      {super.key,
-      required this.url,
-      required this.selectedIndex,
-      required this.title,
-      }
-  );
+  MyHomePage({
+    Key? key,
+    required this.url,
+    required this.selectedIndex,
+    required this.title,
+  }) : super(key: key);
 
   final String title;
   int? selectedIndex;
@@ -40,7 +40,23 @@ class _MyHomePageState extends State<MyHomePage> {
   final controllerGetX = Get.put(MyGetXController());
 
   @override
+  void dispose() {
+    socket!.disconnect();
+    _streamController.close();
+    controllerGetX.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    print('DID CHANGE HOME');
+    
+  }
+
+  @override
   void initState() {
+    print('INIT HOME');
     //gerenate data
     generateGoodRandomData(2, 10);
     // generateGoodRandomData2(3, 10);
@@ -55,47 +71,34 @@ class _MyHomePageState extends State<MyHomePage> {
     socket!.onDisconnect((_) {
       print('Disconnected from server APP');
     });
-    // socket!.on('eventFromServer', (data) {
-    //   List<Map<String, dynamic>> stationData = List<Map<String, dynamic>>.from(data);
-    //   _streamController.add(stationData);
-    // });
+
     socket!.on('eventFromServer', (data) {
-      if (data is List<dynamic>) {
-        List<List<double>> stationData = [];
+      if (data is List<dynamic> && data.isNotEmpty) {
+        if (data[0] is List<dynamic>) {
+          final List<dynamic> memberList = data[0];
+          final List rawData = data;
 
-        for (dynamic item in data) {
-          if (item is List<dynamic>) {
-            List<double> doubleList = [];
-            for (dynamic value in item) {
-              if (value is num) {
-                doubleList.add(value.toDouble());
-              }
-            }
-            stationData.add(doubleList);
-            // print('stationData_: ${stationData}');
+          final List<List<dynamic>> formattedData = [memberList, ...rawData];
+
+          final List<Map<String, dynamic>> resultData = [];
+          final List<String> memberListAsString =
+              memberList.map((member) => member.toString()).toList();
+          for (int i = 1; i < formattedData.length; i++) {
+            final Map<String, dynamic> entry = {
+              'member': memberListAsString,
+              'data': formattedData[i].map((entry) {
+                if (entry is num) {
+                  return entry.toDouble();
+                }
+                return entry;
+              }).toList(),
+            };
+            resultData.add(entry);
           }
+          _streamController.add(resultData);
         }
-
-        List<Map<String, dynamic>> formattedData = stationData.map((list) {
-          return {'data': List<double>.from(list)};
-        }).toList();
-        // print('formatData in home: $formattedData');
-
-        _streamController.add(formattedData);
-        final finalData = formattedData.map<List<double>>((dataMap) {
-          if (dataMap['data'] is List<double>) {
-            final dataList = dataMap['data'] as List<double>;
-            return dataList;
-          }
-          return [];
-        }).toList();
-        // setState(() {
-        //   widget.selectedIndex = (detect(1, finalData[0]));
-        //   // print('selected index: ${widget.selectedIndex}');
-        // });
       }
     });
-
     socket!.emit('eventFromClient');
   }
 
@@ -120,14 +123,6 @@ class _MyHomePageState extends State<MyHomePage> {
     snackbar_custom(context: context, text: message);
   }
 
-  @override
-  void dispose() {
-    socket!.disconnect();
-    _streamController.close();
-    controllerGetX.dispose();
-    super.dispose();
-  }
-
   Future<void> _refresh() async {
     socket!.emit('eventFromClient');
   }
@@ -135,137 +130,155 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: SafeArea(
-      child: StreamBuilder<List<Map<String, dynamic>>>(
-        stream: _streamController.stream,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final stationDataList = snapshot.data!;
-            final formattedData = stationDataList.map<List<double>>((dataMap) {
-              if (dataMap['data'] is List<double>) {
-                final dataList = dataMap['data'] as List<double>;
-                return dataList;
-              }
-              return [];
-            }).toList();
-            if (snapshot.data!.isEmpty ||
-                snapshot.data == null ||
-                snapshot.data == []) {
-              return const Text('empty data');
-            }
+        child: StreamBuilder<List<Map<String, dynamic>>>(
+          
+          stream: _streamController.stream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              // print('snapshotdata: ${snapshot.data}');
 
-            return ScrollConfiguration(
-              behavior: ScrollConfiguration.of(context).copyWith(
-                physics: const BouncingScrollPhysics(),
-                dragDevices: {
-                  PointerDeviceKind.touch,
-                  PointerDeviceKind.mouse,
-                  PointerDeviceKind.trackpad,
-                },
-              ),
-              child: RefreshIndicator(
-                  onRefresh: _refresh,
-                  child: Stack(
-                    children: [
-                      BarChartRace(
-                        selectedIndex: widget.selectedIndex,
-                        // index: 1,
-                        // index: selectedIndex,
-                        index: detect(widget.selectedIndex!.toDouble(), formattedData[0]),
-                        data: convertData(formattedData),
-                        // data: generateGoodRandomData2(2, 6),
-                        initialPlayState: true,
-                        // columnsColor: changeList(detect(1, formattedData[0])),
-                        // columnsColor: colorList,
-                        // columnsColor: shuffleColorList(),
-                        framesPerSecond: 40,
-                        framesBetweenTwoStates: 40,
-                        numberOfRactanglesToShow: formattedData[0].length,
-                        title: "TOURNAMENT LEADER BOARD",
-                        // columnsLabel: [
-                        //   "1232123132141",
-                        //   "3123",
-                        //   "Apple213",
-                        //   "Coca123",
-                        //   "Huawei123",
-                        //   "Sony",
-                        //   'Pepsi',
-                        //   "Samsung",
-                        //   "Netflix",
-                        //   "Facebook",
-                        // ],
-                        columnsLabel: formattedData[0].map((value) =>'PLAYER ${value < 10 ? '0$value' : value.toStringAsFixed(0)}').toList(),
-                        statesLabel: List.generate(
-                          30,
-                          (index) => formatDate(
-                            DateTime.now().add(
-                              Duration(days: index),
-                            ),
-                          ),
-                        ),
-                        titleTextStyle: GoogleFonts.nunitoSans(
-                          color: Colors.white,
-                          fontSize: 26,
+              final List<Map<String, dynamic>>? dataList = snapshot.data;
+              // print('snapshotdata2 $dataList');
+              final List<String> member = dataList![0]['member'].cast<String>();
+              final List<dynamic> rawData = dataList[1]['data'];
+              print('total length: ${member.length}');
+              print('total data 1: ${rawData.first}');
+              print('total length2: ${rawData.last.length}');
+
+              double toDouble(dynamic value) {
+                if (value is num) {
+                  return value.toDouble();
+                }
+                return 0.0; // Replace with a default value if needed
+              }
+
+              final List<List<double>> rawData2 = rawData
+                  .map((entry) => entry is List<dynamic>
+                      ? entry.map(toDouble).toList()
+                      : <double>[])
+                  .toList();
+
+              // print('member $member');
+              // print('rawData $rawData');
+              // print('rawData2 $rawData2');
+              if (snapshot.data!.isEmpty ||
+                  snapshot.data == null ||
+                  snapshot.data == []) {
+                return const Text('empty data');
+              }
+
+              // return Center(
+              //     child: Text(
+              //   'sdfasdfa',
+              //   style: TextStyle(color: Colors.white),
+              // ));
+              return Stack(
+                children: [
+                  BarChartRace(
+                    selectedIndex: widget.selectedIndex,
+                    // index: 0,
+                    // index: widget.selectedIndex,
+                    index: detect(
+                        widget.selectedIndex!.toDouble(), rawData2.first),
+                    data: convertData(rawData2),
+                    // data: generateGoodRandomData2(2, 6),
+                    initialPlayState: true,
+                    // columnsColor: changeList(detect(1, formattedData[0])),
+                    // columnsColor: colorList,
+                    // columnsColor: shuffleColorList(),
+                    framesPerSecond: 40.0,
+                    framesBetweenTwoStates: 40,
+                    // framesPerSecond: 65,
+                    // framesBetweenTwoStates: 65,
+                    numberOfRactanglesToShow: member.length, // <= 10
+                    title: "",
+                    // title: "TOURNAMENT LEADER BOARD",
+                    // columnsLabel: [
+                    //   "1232123132141",
+                    //   "3123",
+                    //   "Apple213",
+                    //   "Coca123",
+                    //   "Huawei123",
+                    //   "Sony",
+                    //   'Pepsi',
+                    //   "Samsung",
+                    //   "Netflix",
+                    //   "Facebook",
+                    // ],
+                    columnsLabel: member,
+                    statesLabel: List.generate(
+                      30,
+                      (index) => formatDate(
+                        DateTime.now().add(
+                          Duration(days: index),
                         ),
                       ),
-                      Positioned(
-                          bottom: 12,
-                          right: 12,
-                          child: widget.selectedIndex==111111?Container(): Text('YOU ARE PLAYER ${widget.selectedIndex}',
+                    ),
+                    titleTextStyle: GoogleFonts.nunitoSans(
+                      color: Colors.white,
+                      fontSize: kIsWeb ? 48 : 36.0,
+                    ),
+                  ),
+                  Positioned(
+                      bottom: 32,
+                      right: 28,
+                      child: widget.selectedIndex == MyString.DEFAULTNUMBER
+                          ? Container()
+                          : Text('YOU ARE PLAYER ${widget.selectedIndex}',
                               style: const TextStyle(
                                 color: MyColor.white,
-                                fontSize: 24,
+                                fontSize: 18,
                               ))),
-                     
-                    ],
-                  )),
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+                ],
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(
+                    strokeWidth: .5, color: MyColor.white),
+              );
+            }
+          },
+        ),
       ),
-    )
-        // barcharcustom(formattedData)
-        // BarCharRace(data: formattedData,)
-        // StreamBuilder<List<Map<String, dynamic>>>(
-        //   stream: _streamController.stream,
-        //   builder: (context, snapshot) {
-        //     if (snapshot.hasData) {
-        //       final stationData = snapshot.data!;
-        //       return ScrollConfiguration(
-        //         behavior: ScrollConfiguration.of(context).copyWith(
-        //           physics: const BouncingScrollPhysics(),
-        //           dragDevices: {
-        //             PointerDeviceKind.touch,
-        //             PointerDeviceKind.mouse,
-        //             PointerDeviceKind.trackpad
-        //           },
-        //         ),
-        //         child: RefreshIndicator(
-        //             onRefresh: _refresh, child: Text('$stationData')
-        //             // ExamplePage(data: stationData)
-        //             ),
-        //       );
-        //     } else {
-        //       return const Center(
-        //         child: CircularProgressIndicator(),
-        //       );
-        //     }
-        //   },
-        // ),
-        );
+    );
+    // barcharcustom(formattedData)
+    // BarCharRace(data: formattedData,)
+    // StreamBuilder<List<Map<String, dynamic>>>(
+    //   stream: _streamController.stream,
+    //   builder: (context, snapshot) {
+    //     if (snapshot.hasData) {
+    //       final stationData = snapshot.data!;
+    //       return ScrollConfiguration(
+    //         behavior: ScrollConfiguration.of(context).copyWith(
+    //           physics: const BouncingScrollPhysics(),
+    //           dragDevices: {
+    //             PointerDeviceKind.touch,
+    //             PointerDeviceKind.mouse,
+    //             PointerDeviceKind.trackpad
+    //           },
+    //         ),
+    //         child: RefreshIndicator(
+    //             onRefresh: _refresh, child: Text('$stationData')
+    //             // ExamplePage(data: stationData)
+    //             ),
+    //       );
+    //     } else {
+    //       return const Center(
+    //         child: CircularProgressIndicator(),
+    //       );
+    //     }
+    //   },
+    // ),
   }
 }
-
-
 
 class FormattedDataText extends StatelessWidget {
   final List<List<double>> formattedData;
 
-  const FormattedDataText({super.key, required this.formattedData});
+  const FormattedDataText({Key? key, required this.formattedData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -295,8 +308,6 @@ List<Color> changeList(int index) {
   colorList[index] = MyColor.green_araconda;
   return colorList;
 }
-
-
 
 List<Color> shuffleColorList() {
   final random = Random();

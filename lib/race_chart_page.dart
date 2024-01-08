@@ -31,7 +31,7 @@ import 'package:tournament_client/utils/mycolors.dart';
 
 class BarCharRace extends StatefulWidget {
 List<List<double>> data;
-  BarCharRace({super.key, required this.data});
+  BarCharRace({Key? key, required this.data}) : super(key: key);
   @override
   _BarCharRaceState createState() => _BarCharRaceState();
 }

@@ -1,31 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tournament_client/admin_verify.dart';
+import 'package:tournament_client/adminpage.dart';
 import 'package:tournament_client/containerpage.dart';
-import 'package:tournament_client/home.dart';
-import 'package:tournament_client/home_mongo.dart';
-import 'package:tournament_client/tournament_page2.dart';
+import 'package:tournament_client/setuppage.dart';
+import 'package:tournament_client/utils/mystring.dart';
 import 'package:tournament_client/welcome.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Tournament Client',
+        title: 'Tournament',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
           useMaterial3: false,
           fontFamily: GoogleFonts.lato().fontFamily,
           textTheme: GoogleFonts.latoTextTheme(
             Theme.of(context).textTheme,
           ),
         ),
+
+
+        routes: {
+          '/containerPage': (context) => ContainerPage(url: MyString.BASEURL, selectedIndex: MyString.DEFAULTNUMBER,),
+        },
+
         // home: MyHomePage2(title: 'text',),
         // home: BarCharRace(),
         // home: MyHomePage(title: 'homepage',selectedIndex: 2,),
@@ -34,14 +43,19 @@ class MyApp extends StatelessWidget {
         //     url: "http://localhost:8090",
         //     title: 'Tournament Client',
         //     selectedIndex: 10
-        //     // selectedIndex: 1111111
+        //     // selectedIndex: MyS
         // )
-        // home:ContainerPage(),
-        home: MyHomePageMongo(
-                  url: "http://localhost:8090",
-                  title: 'Tournament Client',
-                  selectedIndex: 5),
+        // home:const ExamplePage(),
+        // home: ContainerPage(url: 'http://localhost:8090',selectedIndex: 1,),
+        // home: ContainerPage(url: 'http://localhost:8090',selectedIndex: MyString.DEFAULTNUMBER,),
+        // home: MyHomePageMongo(
+        //           url: "http://localhost:8090",
+        //           title: 'Tournament Client',
+        //           selectedIndex: 5),
         // home:const TournamentPage()
+        // home:const SetupPage()
+        home: const AdminVerify()
+        // home:const AdminPage()
         // home:WelcomePage()
         );
   }

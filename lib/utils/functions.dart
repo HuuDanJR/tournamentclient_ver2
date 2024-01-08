@@ -2,7 +2,6 @@ import 'dart:math' as math;
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:tournament_client/home.dart';
 import 'package:tournament_client/utils/mycolors.dart';
 
 List<Color> shuffleColorList() {
@@ -18,7 +17,6 @@ List<Color> shuffleColorList() {
   return newList;
 }
 
-
 // [
 //  "Amazon",
 //   "Google",
@@ -31,7 +29,6 @@ List<Color> shuffleColorList() {
 //   "Netflix",
 //   "Facebook",
 // ],
-
 
 List<List<double>> generateGoodRandomData(int nbRows, int nbColumns) {
   List<List<double>> data =
@@ -53,10 +50,9 @@ List<List<double>> generateGoodRandomData(int nbRows, int nbColumns) {
   return data;
 }
 
-
-
 List<List<double>> generateGoodRandomData2(int nbRows, int nbColumns) {
-  List<List<double>> data = List.generate(nbRows, (index) => List<double>.filled(nbColumns, 0));
+  List<List<double>> data =
+      List.generate(nbRows, (index) => List<double>.filled(nbColumns, 0));
 
   for (int j = 0; j < nbColumns; j++) {
     data[0][j] = j * 10.0;
@@ -78,9 +74,6 @@ List<List<double>> generateGoodRandomData2(int nbRows, int nbColumns) {
   return data;
 }
 
-
-
-
 int detect(double targetIndex, List<double> myList) {
   for (int i = 0; i < myList.length; i++) {
     if (myList[i] == targetIndex) {
@@ -91,7 +84,6 @@ int detect(double targetIndex, List<double> myList) {
   return -1; // Return -1 if the index is not found in the list
 }
 
-
 List<Color> changeList(int index) {
   if (index < 0 || index >= 10) {
     throw ArgumentError('Invalid index. Index should be between 0 and 9.');
@@ -101,8 +93,6 @@ List<Color> changeList(int index) {
   colorList[index] = MyColor.green_araconda;
   return colorList;
 }
-
-
 
 List<Color> colorList = [
   MyColor.green_araconda,
@@ -117,27 +107,10 @@ List<Color> colorList = [
   MyColor.orang3,
 ];
 
-
-
-
-List<List<double>> convertData(data) {
-  if (data.length == 2) {
-    // print('convert data 2 : $data ');
-    return [data.last];
-  } else if (data.length == 3) {
-    // print('convert data 3: $data ');
-    return [data[1], data.last];
-  }
-  print('convert data : $data ');
-  return data;
-}
-
-
-
 class FormattedDataText extends StatelessWidget {
   final List<List<double>> formattedData;
 
-  const FormattedDataText({super.key, required this.formattedData});
+  const FormattedDataText({Key? key, required this.formattedData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -145,23 +118,60 @@ class FormattedDataText extends StatelessWidget {
   }
 }
 
+// ignore: unused_element
+Future<void> _refresh(socket) async {
+  socket!.emit('eventFromClient');
+}
 
-  Future<void> _refresh(socket) async {
-    socket!.emit('eventFromClient');
+int detectInt(List<int> numbers, List<String> times,double targetNumber, List<int> myList) {
+  DateTime latestTime = DateTime(2000); // An arbitrary initial date
+
+  int latestIndex = -1; // Initialize with an invalid index
+
+  for (int i = 0; i < numbers.length; i++) {
+    if (numbers[i] == targetNumber) {
+      final String timeStr = times[i];
+      final DateTime time = DateTime.parse(timeStr);
+
+      if (time.isAfter(latestTime)) {
+        latestTime = time;
+        latestIndex = i;
+      }
+    }
   }
+  // print('latestIndex $latestIndex');
+  // return latestIndex;
 
-
-
-int detectInt(double targetIndex, List<int> myList) {
   for (int i = 0; i < myList.length; i++) {
-    if (myList[i] == targetIndex) {
+    if (myList[i] == targetNumber) {
       // print('index $i');
+        print('index in list: $i');
       return i;
     }
   }
+
   return -1; // Return -1 if the index is not found in the list
 }
 
+int findLatestTimeIndexForNumber(List<int> numbers, List<String> times, int targetNumber) {
+  DateTime latestTime = DateTime(2000); // An arbitrary initial date
+
+  int latestIndex = -1; // Initialize with an invalid index
+
+  for (int i = 0; i < numbers.length; i++) {
+    if (numbers[i] == targetNumber) {
+      final String timeStr = times[i];
+      final DateTime time = DateTime.parse(timeStr);
+
+      if (time.isAfter(latestTime)) {
+        latestTime = time;
+        latestIndex = i;
+      }
+    }
+  }
+  print('latestIndex $latestIndex');
+  return latestIndex;
+}
 
 
 
@@ -202,3 +212,8 @@ int detectInt(double targetIndex, List<int> myList) {
       //   }
       // }
 //     });
+
+
+
+
+

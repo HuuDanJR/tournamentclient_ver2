@@ -1,5 +1,6 @@
 library bar_chart_race;
 
+import 'package:flutter/foundation.dart';
 import "package:flutter/material.dart";
 import 'package:get/get.dart';
 import 'package:tournament_client/lib/getx/controller.get.dart';
@@ -7,6 +8,7 @@ import 'package:tournament_client/utils/mycolors.dart';
 import 'dart:math' as math;
 import 'models/rectangle.dart';
 import 'paint/my_state_paint.dart';
+
 
 /// Creates an interactive bar chart depending on the provided [data], which looks like a race
 ///
@@ -74,7 +76,7 @@ class BarChartRace extends StatefulWidget {
     required this.selectedIndex,
     this.index,
     required this.initialPlayState,
-    this.framesPerSecond = 20,
+    this.framesPerSecond = 35,
     this.framesBetweenTwoStates = 40,
     this.rectangleHeight = 45,
     this.numberOfRactanglesToShow = 5,
@@ -130,38 +132,53 @@ class _BarChartRaceState extends State<BarChartRace> {
     setState(() {});
   }
 
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final double paddingVer = 64.0;
-    final double paddingHoz = 64.0;
+    // const double paddingVer =  48.0;
+    const double paddingVer =   kIsWeb? 60.0: 16.0;
+    // const double paddingVer =  16.0;
+    // const double paddingVer = kIsWeb? 155: 48.0;
+    // const double paddingHoz = 12.0;
+   
+    const double paddingHoz =kIsWeb? 64.0: 12.0;
+    //TABLET
+    // const double paddingVer = 48.0;
+    // const double paddingHoz = 64.0;
 
-    return Scaffold(
-      body: Container(
+    return 
+    
+     Scaffold(
+      backgroundColor: Colors.transparent,
+      body: 
+      Container(
         height: height,
         width: width,
         decoration: const BoxDecoration(
+          // color:Colors.transparent,
+
           // color:MyColor.bedge,
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.black,
-              Colors.black87,
-            ],
-            stops: [
-              0.0,
-              0.75,
-            ], // Adjust the stops to control the gradient effect
-          ),
+          // gradient: LinearGradient(
+          //   begin: Alignment.topCenter,
+          //   end: Alignment.bottomCenter,
+          //   colors: [
+          //     Colors.black,
+          //     Colors.black87,
+          //   ],
+          //   stops: [
+          //     0.0,
+          //     0.75,
+          //   ], // Adjust the stops to control the gradient effect
+          // ),
           // image: DecorationImage(
           //   filterQuality: FilterQuality.low,
           //   image: AssetImage('asset/bg1.png'),
           //   fit: BoxFit.cover, // Make the image cover the entire container
           // ),
         ),
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: paddingHoz,
           vertical: paddingVer,
         ),
@@ -172,16 +189,23 @@ class _BarChartRaceState extends State<BarChartRace> {
               currentState: currentData!,
               numberOfRactanglesToShow: widget.numberOfRactanglesToShow,
               // rectHeight: widget.rectangleHeight,
-              rectHeight: 38.5,
+              // TABLET
+              // rectHeight: 27.5,
+              //WEB
+              rectHeight:kIsWeb? 40 :  32.5,
+              // rectHeight:  27.5,
               maxValue: currentData![0].maxValue,
-              totalWidth: constraints.maxWidth * .9,
+              // totalWidth:kIsWeb?constraints.maxWidth * .8: constraints.maxWidth * .835,
+              // totalWidth:  constraints.maxWidth * .835,
+              totalWidth:kIsWeb?  constraints.maxWidth * .875 :  constraints.maxWidth * .835,
               title: widget.title,
               titleTextStyle: widget.titleTextStyle,
               maxLength: null,
             ),
           ),
         ),
-      ),
+      )
+    
 
       //  Stack(
       //   alignment: Alignment.center,
