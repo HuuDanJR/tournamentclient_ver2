@@ -50,14 +50,25 @@ List<List<double>> generateGoodRandomData(int nbRows, int nbColumns) {
   return data;
 }
 
+List<List<double>> generateChartData(List<List<double>> inputData) {
+  List<List<double>> data = List.generate(
+      inputData.length, (index) => List<double>.filled(inputData[0].length, 0));
+
+  for (int i = 0; i < inputData.length; i++) {
+    for (int j = 0; j < inputData[i].length; j++) {
+      data[i][j] = inputData[i][j];
+    }
+  }
+
+  return data;
+}
+
 List<List<double>> generateGoodRandomData2(int nbRows, int nbColumns) {
   List<List<double>> data =
       List.generate(nbRows, (index) => List<double>.filled(nbColumns, 0));
-
   for (int j = 0; j < nbColumns; j++) {
     data[0][j] = j * 10.0;
   }
-
   for (int i = 1; i < nbRows; i++) {
     for (int j = 0; j < nbColumns; j++) {
       double calculatedValue = data[i - 1][j] +
@@ -66,7 +77,6 @@ List<List<double>> generateGoodRandomData2(int nbRows, int nbColumns) {
           (j == 2 ? 10 : 0);
       data[i][j] = calculatedValue;
     }
-
     // Shuffle the values in the current row
     data[i].shuffle();
   }
@@ -110,7 +120,8 @@ List<Color> colorList = [
 class FormattedDataText extends StatelessWidget {
   final List<List<double>> formattedData;
 
-  const FormattedDataText({Key? key, required this.formattedData}) : super(key: key);
+  const FormattedDataText({Key? key, required this.formattedData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +134,8 @@ Future<void> _refresh(socket) async {
   socket!.emit('eventFromClient');
 }
 
-int detectInt(List<int> numbers, List<String> times,double targetNumber, List<int> myList) {
+int detectInt(List<int> numbers, List<String> times, double targetNumber,
+    List<int> myList) {
   DateTime latestTime = DateTime(2000); // An arbitrary initial date
 
   int latestIndex = -1; // Initialize with an invalid index
@@ -145,7 +157,7 @@ int detectInt(List<int> numbers, List<String> times,double targetNumber, List<in
   for (int i = 0; i < myList.length; i++) {
     if (myList[i] == targetNumber) {
       // print('index $i');
-        print('index in list: $i');
+      print('index in list: $i');
       return i;
     }
   }
@@ -153,7 +165,8 @@ int detectInt(List<int> numbers, List<String> times,double targetNumber, List<in
   return -1; // Return -1 if the index is not found in the list
 }
 
-int findLatestTimeIndexForNumber(List<int> numbers, List<String> times, int targetNumber) {
+int findLatestTimeIndexForNumber(
+    List<int> numbers, List<String> times, int targetNumber) {
   DateTime latestTime = DateTime(2000); // An arbitrary initial date
 
   int latestIndex = -1; // Initialize with an invalid index
@@ -173,47 +186,110 @@ int findLatestTimeIndexForNumber(List<int> numbers, List<String> times, int targ
   return latestIndex;
 }
 
-
-
 // socket!.on('eventFromServerMongo', (data) {
-      // final Map<String, dynamic>? jsonData = data as Map<String, dynamic>?;
+// final Map<String, dynamic>? jsonData = data as Map<String, dynamic>?;
 
-      // if (jsonData != null) {
-      //   final List<dynamic>? dataList = jsonData['data'] as List<dynamic>?;
-      //   final List<dynamic>? nameList = jsonData['name'] as List<dynamic>?;
+// if (jsonData != null) {
+//   final List<dynamic>? dataList = jsonData['data'] as List<dynamic>?;
+//   final List<dynamic>? nameList = jsonData['name'] as List<dynamic>?;
 
-      //   if (dataList != null && nameList != null) {
-      //     final List<Map<String, dynamic>> formattedData = [];
+//   if (dataList != null && nameList != null) {
+//     final List<Map<String, dynamic>> formattedData = [];
 
-      //     for (int i = 0; i < dataList.length; i++) {
-      //       formattedData.add({
-      //         'data': dataList[i],
-      //         'name': nameList[i],
-      //         'number': i + 1,
-      //       });
-      //     }
+//     for (int i = 0; i < dataList.length; i++) {
+//       formattedData.add({
+//         'data': dataList[i],
+//         'name': nameList[i],
+//         'number': i + 1,
+//       });
+//     }
 
-      //     final List<double> dataNumbers =
-      //         formattedData.map((entry) => entry['data'] as double).toList();
-      //     final List<String> nameNumbers =
-      //         formattedData.map((entry) => entry['name'] as String).toList();
-      //     final List<int> numberList =List.generate(formattedData.length, (i) => i + 1);
+//     final List<double> dataNumbers =
+//         formattedData.map((entry) => entry['data'] as double).toList();
+//     final List<String> nameNumbers =
+//         formattedData.map((entry) => entry['name'] as String).toList();
+//     final List<int> numberList =List.generate(formattedData.length, (i) => i + 1);
 
-      //     final List<Map<String, dynamic>> finalFormattedData = [
-      //       {
-      //         'data': dataNumbers,
-      //         'name': nameNumbers,
-      //         'number': numberList,
-      //       }
-      //     ];
-      //     print('final $finalFormattedData');
+//     final List<Map<String, dynamic>> finalFormattedData = [
+//       {
+//         'data': dataNumbers,
+//         'name': nameNumbers,
+//         'number': numberList,
+//       }
+//     ];
+//     print('final $finalFormattedData');
 
-      //     _streamController.add(finalFormattedData);
-      //   }
-      // }
+//     _streamController.add(finalFormattedData);
+//   }
+// }
 //     });
 
+// List<Color> colorList = [
+//   MyColor.green_araconda,
+//   MyColor.orang3,
+//   MyColor.orang3,
+//   MyColor.orang3,
+//   MyColor.orang3,
+//   MyColor.orang3,
+//   MyColor.orang3,
+//   MyColor.orang3,
+//   MyColor.orang3,
+//   MyColor.orang3,
+// ];
+
+///THIS IS CONVERTING OR CREATE 2D CHART DATA ** IMPORTANCE **
+List<List<double>> generateNewData(List<List<double>> existingData) {
+  if (existingData.isEmpty) {
+    return existingData;
+  }
+
+  int nbRows = existingData.length;
+  int nbColumns = existingData[0].length;
+
+  // Create a new 2D list to store the generated data
+  List<List<double>> newData = List.generate(nbRows, (index) => List<double>.filled(nbColumns, 0));
+
+  // Set initial values for the first row based on the existing data
+  for (int j = 0; j < nbColumns; j++) {
+    newData[0][j] = existingData[0][j] * 0.00000001; // Adjust the multiplier as needed
+  }
+
+  // Copy the last row from the existing data to the second row in the new data
+  for (int j = 0; j < nbColumns; j++) {
+    newData[1][j] = existingData.last[j];
+  }
+
+  // Generate random data for the remaining rows
+  for (int i = 2; i < nbRows; i++) {
+    for (int j = 0; j < nbColumns; j++) {
+      double calculatedValue = newData[i - 1][j] +
+          (nbColumns - j) +
+          math.Random().nextDouble() * 0.00000001 +
+          (j == 2 ? 0.00000001 : 0);
+      newData[i][j] = calculatedValue;
+    }
+    // Shuffle the values in the current row
+    newData[i].shuffle();
+  }
+
+  return newData;
+}
 
 
 
 
+
+
+List<List<double>> convertData(data) {
+  print('data 2: $data');
+  if (data.length == 2) {
+    // print('convert data 2 : $data ');
+    return [data.last];
+  } else if (data.length == 3) {
+    // print('convert data 3: $data ');
+    return [data[1], data.last];
+  }
+  print('convert data : $data ');
+
+  return data;
+}

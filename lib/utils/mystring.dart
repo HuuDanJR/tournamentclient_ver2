@@ -14,6 +14,8 @@ class MyString{
 
 
      static const String list_station = '${BASE}list_station';
+     static const String create_station = '${BASE}create_station';
+     static const String delete_station = '${BASE}delete_station';
      static const String update_station_status = '${BASE}update_station';
 
 }

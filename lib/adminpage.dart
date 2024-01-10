@@ -17,10 +17,8 @@ class _AdminPageState extends State<AdminPage> {
   IO.Socket? socket;
   final TextEditingController controllerName = TextEditingController(text: '');
   final TextEditingController controllerNumber = TextEditingController(text: '');
-  final TextEditingController controllerPoint =
-      TextEditingController(text: '0');
-  GlobalKey<RefreshIndicatorState> refreshKey =
-      GlobalKey<RefreshIndicatorState>();
+  final TextEditingController controllerPoint = TextEditingController(text: '0');
+  GlobalKey<RefreshIndicatorState> refreshKey = GlobalKey<RefreshIndicatorState>();
   Future<void> _refreshData() async {
     // Fetch and update your data from the server here
     // final updatedData = await service_api.listRanking();
@@ -31,29 +29,27 @@ class _AdminPageState extends State<AdminPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    debugPrint('INIT ADMINPAGE');
     super.initState();
-    socket = IO.io('http://30.0.0.53:8090', <String, dynamic>{
+    socket = IO.io('http://localhost:8090', <String, dynamic>{
       'transports': ['websocket'],
     });
     socket!.onConnect((_) {
       print('Connected to server APP2');
     });
     socket!.onDisconnect((_) {
-      print('Disconnected from server APP2');
+      print('Disconnected server from adminpage');
     });
     socket!.emit('eventFromClient2_force');
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     socket!.dispose();
   }
 
   void emitEvent() {
-    // Emit the 'eventFromClient2' event to the server
     socket!.emit('eventFromClient2_force');
   }
 
@@ -68,7 +64,8 @@ class _AdminPageState extends State<AdminPage> {
             print('add');
             openAlertDialog(
                 function: () {
-                  service_api.createRanking(
+                  service_api
+                      .createRanking(
                           // customer_name: 'test',customer_number: '234',point:'234',
                           customer_name: controllerName.text,
                           customer_number: controllerNumber.text,
@@ -84,10 +81,10 @@ class _AdminPageState extends State<AdminPage> {
                   }).whenComplete(() {
                     setState(() {
                       controllerName.text = '';
-                    controllerNumber.text = '';
-                    controllerPoint.text = '0';
+                      controllerNumber.text = '';
+                      controllerPoint.text = '0';
                     });
-                    
+
                     Navigator.of(context).pop();
                   });
                 },
@@ -101,12 +98,17 @@ class _AdminPageState extends State<AdminPage> {
             Icons.add,
           )),
       body: Container(
-          padding:  EdgeInsets.symmetric(horizontal:16.0,vertical: 8.0),
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           width: width,
           height: height,
           alignment: Alignment.topCenter,
           decoration: BoxDecoration(
-            image: DecorationImage(image: AssetImage('asset/bg3.jpg',),fit: BoxFit.cover,filterQuality: FilterQuality.low),
+            image: DecorationImage(
+                image: AssetImage(
+                  'asset/bg3.jpg',
+                ),
+                fit: BoxFit.cover,
+                filterQuality: FilterQuality.low),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -116,8 +118,10 @@ class _AdminPageState extends State<AdminPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset('asset/image/logo_renew.png',
-                      width: 65.0, height: 65.0),
+                  IconButton(onPressed: (){
+                    Navigator.of(context).pop();
+                  }, icon: Icon(Icons.arrow_back_ios,)),
+                  
                   ElevatedButton(
                       onPressed: () {
                         print('reset all for the 1st round');
@@ -125,21 +129,29 @@ class _AdminPageState extends State<AdminPage> {
                             .deleteRankingAllAndAddDefault()
                             .whenComplete(() => null);
                       },
-                      child: textcustom(text:'RESET RANKING',size: 14,color:MyColor.black_text)),
+                      child: textcustom(
+                          text: 'RESET RANKING',
+                          size: 14.0,
+                          color: MyColor.black_text)),
                   ElevatedButton(
                       onPressed: () {
                         print('refresh to list');
-                        setState(() {
-                          
-                        });
+                        setState(() {});
                       },
-                      child:  textcustom(text:'REFRESH LIST',size: 14,color:MyColor.black_text)),
+                      child: textcustom(
+                          text: 'REFRESH LIST',
+                          size:  14.0,
+                          color: MyColor.black_text)),
                   ElevatedButton(
                       onPressed: () {
                         print('refresh to force update data');
                         socket!.emit('eventFromClient2_force');
                       },
-                      child: textcustom(text:'REFRESH TABLET',size: 14,color:MyColor.black_text))
+                      child: textcustom(
+                          text: 'REFRESH TABLET',
+                          size:  14.0,
+                          color: MyColor.black_text)),
+                  Image.asset('asset/image/logo_renew.png', width: 65.0, height: 65.0),
                 ],
               ),
               SizedBox(
@@ -170,8 +182,9 @@ class _AdminPageState extends State<AdminPage> {
                               margin: const EdgeInsets.only(bottom: 10.0),
                               decoration: BoxDecoration(
                                   color: MyColor.white,
-                                  border: Border.all(color: MyColor.yellow_accent, width: .5),
-                                  borderRadius: BorderRadius.circular(16)),
+                                  border: Border.all(
+                                      color: MyColor.yellow_accent, width: .5),
+                                  borderRadius: BorderRadius.circular(16.0)),
                               child: ListTile(
                                 leading: Text(
                                   '${index + 1}',
@@ -258,14 +271,17 @@ class _AdminPageState extends State<AdminPage> {
                                 visualDensity:
                                     VisualDensity.adaptivePlatformDensity,
                                 selectedColor: MyColor.white,
-                                title: Text('Customer Name: ${model.data![index].customerName}'),
+                                title: Text(
+                                    'Customer Name: ${model.data![index].customerName}'),
                                 subtitle: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Customer Number: ${model.data![index].customerNumber} '),
+                                    Text(
+                                        'Customer Number: ${model.data![index].customerNumber} '),
                                     Text('Point: ${model.data![index].point} '),
-                                    Text('Created Time: ${model.data![index].createdAt} '),
+                                    Text(
+                                        'Created Time: ${model.data![index].createdAt} '),
                                   ],
                                 ),
                               ),

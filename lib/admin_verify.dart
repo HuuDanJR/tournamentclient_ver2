@@ -6,12 +6,12 @@ import 'package:tournament_client/setuppage.dart';
 import 'package:tournament_client/utils/mycolors.dart';
 import 'package:tournament_client/utils/mystring.dart';
 import 'package:tournament_client/utils/showsnackbar.dart';
+import 'package:tournament_client/welcome.dart';
 import 'package:tournament_client/widget/text.dart';
-import "dart:html" as html;
+// import "dart:html" as html;
 
 class AdminVerify extends StatefulWidget {
   const AdminVerify({Key? key}) : super(key: key);
-
   @override
   State<AdminVerify> createState() => _AdminVerifyState();
 }
@@ -37,7 +37,7 @@ class _AdminVerifyState extends State<AdminVerify> {
 
     return Scaffold(
         // Your scaffold content
-        body: Container(
+      body: Container(
       height: height,
       width: width,
       decoration: const BoxDecoration(
@@ -70,7 +70,7 @@ class _AdminVerifyState extends State<AdminVerify> {
                 textcustom(text: 'LOGIN ADMIN', size: 18.0),
                 IconButton(
                     onPressed: () {
-                      html.window.location.reload();
+                      // html.window.location.reload();
                     },
                     icon: Icon(Icons.refresh, color: MyColor.red_accent))
               ],
@@ -110,35 +110,49 @@ class _AdminVerifyState extends State<AdminVerify> {
             const SizedBox(
               height: 24.0,
             ),
-            ElevatedButton(
-                onPressed: () {
-                  if (validateFields(
-                        controllerName,
-                        controllerPass,
-                      ) ==
-                      true) {
-                    if (controllerName.text == 'admin' &&
-                        controllerPass.text == 'vegas123') {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const AdminPage(),
-                      ));
-                    } else {
-                      showSnackBar(
-                          context: context,
-                          message:
-                              'Password or username not correct, please try again');
-                    }
-                  } else {
-                    showSnackBar(
-                        context: context,
-                        message: 'Please fill  password or username');
-                    // You can use a ScaffoldMessenger or other methods to display the error message.
-                  }
-                },
-                child: textcustom(text: "SUBMIT")),
-            const SizedBox(height: 24.0),
+            //Row Admin Page
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      if (validateFields(
+                            controllerName,
+                            controllerPass,
+                          ) ==
+                          true) {
+                        if (controllerName.text == 'admin' &&
+                            controllerPass.text == 'vegas123') {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const AdminPage(),
+                          ));
+                        } else {
+                          showSnackBar(
+                              context: context,
+                              message:'Password or username not correct, please try again');
+                        }
+                      } else {
+                        showSnackBar(
+                            context: context,
+                            message: 'Please fill  password or username');
+                        // You can use a ScaffoldMessenger or other methods to display the error message.
+                      }
+                    },
+                    child: textcustom(text: "SUBMIT")),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (_) => SetupPage()));
+                    },
+                    child: textcustom(text: "SETUP")),
+              ],
+            ),
+            const SizedBox(height: 24.0),
+            //ROW VIEW PLAYERS
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ElevatedButton(
                     onPressed: () {
@@ -148,13 +162,14 @@ class _AdminVerifyState extends State<AdminVerify> {
                                 selectedIndex: MyString.DEFAULTNUMBER,
                               )));
                     },
-                    child: textcustom(text: "WEB CLIENT")),
+                    child: textcustom(text: "VIEW")),
                 ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) => SetupPage()));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => WelcomePage()));
                     },
-                    child: textcustom(text: "SETUP")),
+                    child: textcustom(text: "VIEW AS PLAYER")),
+                
               ],
             )
           ],

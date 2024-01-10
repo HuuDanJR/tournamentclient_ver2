@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
 import 'package:tournament_client/lib/models/rankingmodel.dart';
 import 'package:tournament_client/lib/models/stationmodel.dart';
+import 'package:tournament_client/service/format.date.factory.dart';
 import 'package:tournament_client/utils/mystring.dart';
 
 class ServiceAPIs {
@@ -211,6 +213,74 @@ class ServiceAPIs {
     try {
       final response = await dio.delete(
         MyString.delete_ranking,
+        data: body,
+        options: Options(
+          contentType: Headers.jsonContentType,
+          receiveTimeout: const Duration(seconds: 10000),
+          sendTimeout: const Duration(seconds: 10000),
+          followRedirects: false,
+          validateStatus: (status) {
+            return true;
+          },
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+        ),
+      );
+      print(response.data);
+      return (response.data);
+    } on DioError catch (e) {
+      print(e.message);
+    }
+  }
+
+  Future<dynamic> createStation({machine, member}) async {
+    final format_date = StringFormat();
+    final Dio dio = Dio();
+    Map<String, dynamic> body = {
+      "machine": machine,
+      "member": member,
+      "bet": 0,
+      "credit": 0,
+      "connect": 0,
+      "status": 0,
+      "aft": 0,
+      "lastupdate": DateTime.now().toString(),
+      "display": 0
+    };
+    try {
+      final response = await dio.post(
+        MyString.create_station,
+        data: body,
+        options: Options(
+          contentType: Headers.jsonContentType,
+          receiveTimeout: const Duration(seconds: 10000),
+          sendTimeout: const Duration(seconds: 10000),
+          followRedirects: false,
+          validateStatus: (status) {
+            return true;
+          },
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+        ),
+      );
+      print(response.data);
+      return (response.data);
+    } on DioError catch (e) {
+      print(e.message);
+    }
+  }
+
+  Future<dynamic> deleteStation({machine, member}) async {
+    final Dio dio = Dio();
+    Map<String, dynamic> body = {
+      "machine": machine,
+      "member": member,
+    };
+    try {
+      final response = await dio.delete(
+        MyString.delete_station,
         data: body,
         options: Options(
           contentType: Headers.jsonContentType,

@@ -141,6 +141,7 @@ class _MyHomePageMongoState extends State<MyHomePageMongo> {
                         // index: detectInt(widget.selectedIndex!.toDouble(), numbers),
                         // selectedIndex: 1,index: 3,
                         data: convertData(dataField2),
+                        // data: convertData(dataField2),
                         initialPlayState: true,
                         framesPerSecond: 40.0,
                         framesBetweenTwoStates: 40,
@@ -211,19 +212,7 @@ List<List<double>> generateGoodRandomData(int nbRows, int nbColumns) {
   return data;
 }
 
-List<List<double>> convertData(data) {
-  print('data 2: $data');
-  if (data.length == 2) {
-    // print('convert data 2 : $data ');
-    return [data.last];
-  } else if (data.length == 3) {
-    // print('convert data 3: $data ');
-    return [data[1], data.last];
-  }
-  print('convert data : $data ');
 
-  return data;
-}
 
 String removeDecimalZeroFormat(double n) {
   return n.toStringAsFixed(n.truncateToDouble() == n ? 0 : 1);
