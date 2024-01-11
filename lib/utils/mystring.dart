@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 class MyString{
     static const int DEFAULTNUMBER = 111111;
     static const String ADRESS_LOCAL = "localhost";
@@ -17,5 +19,9 @@ class MyString{
      static const String create_station = '${BASE}create_station';
      static const String delete_station = '${BASE}delete_station';
      static const String update_station_status = '${BASE}update_station';
+
+
+     static const double DEFAULT_HEIGHT_LINE =kIsWeb?40:40;
+     static const double DEFAULT_SPACING_LING=kIsWeb?34:22;
 
 }

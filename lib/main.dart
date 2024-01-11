@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         // )
         // home:const ExamplePage(),
         // home: ContainerPage(url: 'http://localhost:8090',selectedIndex: 1,),
-        // home: ContainerPage(url: 'http://localhost:8090',selectedIndex: MyString.DEFAULTNUMBER,),
+        
         // home: MyHomePageMongo(
         //           url: "http://localhost:8090",
         //           title: 'Tournament Client',
@@ -57,6 +57,7 @@ class MyApp extends StatelessWidget {
         home: const AdminVerify()
         // home:const AdminPage()
         // home:WelcomePage()
+        // home: ContainerPage(url: 'http://localhost:8090',selectedIndex: MyString.DEFAULTNUMBER,),
         );
   }
 }

@@ -5,6 +5,7 @@ import "package:flutter/material.dart";
 import 'package:get/get.dart';
 import 'package:tournament_client/lib/getx/controller.get.dart';
 import 'package:tournament_client/utils/mycolors.dart';
+import 'package:tournament_client/utils/mystring.dart';
 import 'dart:math' as math;
 import 'models/rectangle.dart';
 import 'paint/my_state_paint.dart';
@@ -68,6 +69,7 @@ class BarChartRace extends StatefulWidget {
   final double rectangleHeight;
   final int? index;
   final int? selectedIndex;
+  final double? spaceBetweenTwoRectangles;
 
   const BarChartRace({
     Key? key,
@@ -84,6 +86,7 @@ class BarChartRace extends StatefulWidget {
     this.columnsColor,
     required this.title,
     required this.titleTextStyle,
+    required this.spaceBetweenTwoRectangles,
   }) : super(key: key);
 
   @override
@@ -122,7 +125,7 @@ class _BarChartRaceState extends State<BarChartRace> {
       preparedData = prepareData(widget.data);
       // currentData = preparedData![0];
       print('did update widget data : ${widget.data}');
-      
+
       if (widget.initialPlayState) play();
     }
     super.didUpdateWidget(oldWidget);
@@ -185,11 +188,12 @@ class _BarChartRaceState extends State<BarChartRace> {
                 index: widget.index,
                 currentState: currentData!,
                 numberOfRactanglesToShow: widget.numberOfRactanglesToShow,
-                // rectHeight: widget.rectangleHeight,
+                rectHeight: widget.rectangleHeight,
+                spaceBetweenTwoRectangles:widget.spaceBetweenTwoRectangles!,
                 // TABLET
                 // rectHeight: 27.5,
                 //WEB
-                rectHeight: kIsWeb ? 40 : 32.5,
+                // rectHeight: kIsWeb ? 40 : 32.5,
                 // rectHeight:  27.5,
                 maxValue: currentData![0].maxValue,
                 // totalWidth:kIsWeb?constraints.maxWidth * .8: constraints.maxWidth * .835,

@@ -9,6 +9,7 @@ import 'package:tournament_client/home_future.dart';
 import 'package:tournament_client/lib/bar_chart.widget.dart';
 import 'package:tournament_client/lib/bar_chart_race.dart';
 import 'package:tournament_client/lib/getx/controller.get.dart';
+import 'package:tournament_client/utils/detect_resolution.dart';
 import 'package:tournament_client/utils/functions.dart';
 import 'package:tournament_client/utils/mycolors.dart';
 import 'package:tournament_client/utils/mystring.dart';
@@ -113,49 +114,43 @@ class _MyHomePageState extends State<MyHomePage> {
               print('total data first: ${rawData.first}');
               print('total data last: ${rawData.last}');
 
-              final List<List<double>> rawData2 = rawData
+              final List<List<double>> processData = rawData
                   .map((entry) => entry is List<dynamic>
                       ? entry.map(toDoubleFunc).toList()
                       : <double>[])
                   .toList();
-              print('total data proccessed 1st: ${rawData2.first.length}');
-              print('total data proccessed 1st: ${rawData2.first}');
-              print('total data proccessed last: ${rawData2.last.length}');
+              print('total data proccessed 1st length: ${processData.first.length}');
+              print('total data proccessed 1st: ${processData.first}');
+              print('total data proccessed last: ${processData.last.length}');
               if (snapshot.data!.isEmpty ||
                   snapshot.data == null ||
                   snapshot.data == []) {
                 return const Text('empty data');
               }
-              print('data will be marked yellow: ${rawData2.first}');
+              print('data will be marked yellow: ${processData.first}');
+              
               return Stack(
                 children: [
                   BarChartRace(
                     selectedIndex: widget.selectedIndex,
-                    // index: 0,
-                    // index: widget.selectedIndex,
-                    index:detect(widget.selectedIndex!.toDouble(), rawData2.first),
-                    data: convertData(rawData2),
-                    // data: (generateNewData(rawData2)),
-                    // data: generateGoodRandomData2(2, 10),
+                    index:detect(widget.selectedIndex!.toDouble(), processData.first),
+                    data: convertData(processData),
                     initialPlayState: true,
                     framesPerSecond: 65.0,
                     framesBetweenTwoStates: 65,
-                    // numberOfRactanglesToShow: 10, // <= 10
-                    numberOfRactanglesToShow: rawData2.last.length, // <= 10
+                    // spaceBetweenTwoRectangles:detectResolutionSpacing(input: processData.last.length),
+                    // rectangleHeight: 27.5,
+                    spaceBetweenTwoRectangles:detectResolutionSpacing(processData.last.length),
+                    rectangleHeight: detectResolutionHeight(processData.last.length),
+                    // spaceBetweenTwoRectangles: detectSpacingHeight(input: processData.last.length,isHeight: false,isSpacing: true),
+                    // rectangleHeight: detectSpacingHeight(input: processData.last.length,isHeight: true,isSpacing: false),
+                    // rectangleHeight: 26,
+                    // spaceBetweenTwoRectangles: 22,
+                    numberOfRactanglesToShow: processData.last.length, // <= 10
                     title: "",
                     columnsLabel: member,
-                    statesLabel: List.generate(
-                      30,
-                      (index) => formatDate(
-                        DateTime.now().add(
-                          Duration(days: index),
-                        ),
-                      ),
-                    ),
-                    titleTextStyle: GoogleFonts.nunitoSans(
-                      color: Colors.white,
-                      fontSize: kIsWeb ? 48 : 36.0,
-                    ),
+                    statesLabel: listLabelGenerate(),
+                    titleTextStyle: const TextStyle(),
                   ),
                   Positioned(
                       bottom: 32,
@@ -213,3 +208,4 @@ double toDoubleFunc(dynamic value) {
   }
   return 0.0; // Replace with a default value if needed
 }
+

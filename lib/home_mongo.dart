@@ -7,9 +7,12 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:tournament_client/lib/bar_chart.widget.dart';
 import 'package:tournament_client/lib/bar_chart_race.dart';
 import 'package:tournament_client/lib/getx/controller.get.dart';
+import 'package:tournament_client/utils/detect_resolution.dart';
 import 'package:tournament_client/utils/functions.dart';
 import 'package:tournament_client/utils/mycolors.dart';
 import 'dart:math' as math;
+
+import 'package:tournament_client/utils/mystring.dart';
 
 // ignore: must_be_immutable
 class MyHomePageMongo extends StatefulWidget {
@@ -123,9 +126,7 @@ class _MyHomePageMongoState extends State<MyHomePageMongo> {
                 // final List<List<double>> dataField = List<List<double>>.from(data[0]['data'].map<List<double>>((item) => List<double>.from(item)));
 
                 final List<List<double>> dataField2 = List<List<double>>.from(
-                    data[0]['data'].map<List<double>>((item) =>
-                        List<double>.from(
-                            item.map((value) => value.toDouble()))));
+                    data[0]['data'].map<List<double>>((item) => List<double>.from(item.map((value) => value.toDouble()))));
                 // return Center(child: Text('abc $dataField2'));
 
                 return RefreshIndicator(
@@ -136,8 +137,8 @@ class _MyHomePageMongoState extends State<MyHomePageMongo> {
                       BarChartRace(
                         // selectedIndex: widget.selectedIndex,
                         selectedIndex: widget.selectedIndex,
-                        index: detectInt(numbers, times,
-                            widget.selectedIndex!.toDouble(), numbers),
+                        spaceBetweenTwoRectangles: MyString.DEFAULT_SPACING_LING,
+                        index: detectInt(numbers, times,widget.selectedIndex!.toDouble(), numbers),
                         // index: detectInt(widget.selectedIndex!.toDouble(), numbers),
                         // selectedIndex: 1,index: 3,
                         data: convertData(dataField2),
@@ -152,14 +153,7 @@ class _MyHomePageMongoState extends State<MyHomePageMongo> {
                         // title: "TOURNAMENT LEADER BOARD",
                         columnsLabel: updatedNames,
                         // columnsLabel: names,
-                        statesLabel: List.generate(
-                          30,
-                          (index) => formatDate(
-                            DateTime.now().add(
-                              Duration(days: index),
-                            ),
-                          ),
-                        ),
+                        statesLabel:listLabelGenerate(),
                         titleTextStyle: GoogleFonts.nunitoSans(
                           color: Colors.white,
                           fontSize: kIsWeb ? 48 : 48.0,
@@ -211,6 +205,8 @@ List<List<double>> generateGoodRandomData(int nbRows, int nbColumns) {
   print(data);
   return data;
 }
+
+
 
 
 

@@ -1,5 +1,6 @@
 library bar_chart_race;
 
+import 'package:flutter/foundation.dart';
 import "package:flutter/material.dart";
 import 'dart:math' as math;
 import 'models/rectangle.dart';
@@ -135,6 +136,7 @@ class _BarChartRaceCopyState extends State<BarChartRaceCopy> {
           child: LayoutBuilder(
             builder: (_, constraints) => CustomPaint(
               painter: MyStatePaint(
+                spaceBetweenTwoRectangles:kIsWeb? 32 : 22 ,
                 currentState: currentData!,
                 numberOfRactanglesToShow: widget.numberOfRactanglesToShow,
                 rectHeight: widget.rectangleHeight,

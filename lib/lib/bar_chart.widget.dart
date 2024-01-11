@@ -23,6 +23,7 @@ Widget barcharcustom(data) {
     ],
     framesPerSecond: 60,
     framesBetweenTwoStates: 30,
+    spaceBetweenTwoRectangles: 22,
     numberOfRactanglesToShow: 10,
     title: "RANKING TOURNAMENT",
     columnsLabel: const [

@@ -10,6 +10,7 @@ class MyStatePaint extends CustomPainter {
   final double rectHeight;
   final double totalWidth;
   final int numberOfRactanglesToShow;
+  final double spaceBetweenTwoRectangles;
   final String title;
   final int? index;
   final TextStyle titleTextStyle;
@@ -27,10 +28,10 @@ class MyStatePaint extends CustomPainter {
     required this.numberOfRactanglesToShow,
     required this.totalWidth,
     required this.rectHeight,
+    required this.spaceBetweenTwoRectangles,
     required this.title,
     this.index,
     required this.titleTextStyle,
-
     // required this.rectPaint,
     // required this.linePaint,
     required this.maxLength,
@@ -40,24 +41,20 @@ class MyStatePaint extends CustomPainter {
     rectPaint.style = PaintingStyle.fill;
     rectPaint.strokeWidth = 0;
     rectPaint.strokeCap = StrokeCap.round;
-
     // proporties for lines paint
     linePaint.color = Colors.grey;
     linePaint.style = PaintingStyle.stroke;
     linePaint.strokeWidth = .5;
     linePaint.strokeCap = StrokeCap.round;
-
-    maxLength = kIsWeb? totalWidth * 0.875 :  totalWidth * 0.835;
+    maxLength = kIsWeb ? totalWidth * 0.875 : totalWidth * 0.835;
   }
   //TABLEt
-  final double spaceBetweenTwoRectangles =kIsWeb? 34 : 22;
+  // final double spaceBetweenTwoRectangles2 = kIsWeb? 34 : 22;
   // final double spaceBetweenTwoRectangles = 22;
   // final double spaceBetweenTwoRectangles = 36;
   final double yShift = 55;
   final double xShift = 80;
   // define text painter to paint text (write text)
-
-  
 
   final TextPainter textPainter = TextPainter(
     textAlign: TextAlign.center,
@@ -65,11 +62,11 @@ class MyStatePaint extends CustomPainter {
   );
   final TextStyle textStyle = GoogleFonts.bebasNeue(
     color: MyColor.white,
-    fontSize:kIsWeb? 29 : 24.0,
+    fontSize: kIsWeb ? 29 : 24.0,
   );
   final TextStyle textStyleLabel = GoogleFonts.bebasNeue(
     color: MyColor.red_text2,
-    fontSize:kIsWeb ? 29: 24.0,
+    fontSize: kIsWeb ? 29 : 24.0,
   );
 
   final TextStyle textStyleDrawLine = GoogleFonts.nunito(
@@ -84,7 +81,7 @@ class MyStatePaint extends CustomPainter {
   );
   final TextStyle textStyleBold = GoogleFonts.playfairDisplay(
     color: Colors.black,
-    fontSize: kIsWeb? 24 : 18.0,
+    fontSize: kIsWeb ? 24 : 18.0,
     textBaseline: TextBaseline.alphabetic,
     fontWeight: FontWeight.bold,
   );
@@ -96,27 +93,26 @@ class MyStatePaint extends CustomPainter {
     // draw title if not null
     _drawTitle(canvas, title);
     // first we draw the line under the ractangles
-    _drawLines(canvas);
+    _drawLines(canvas,spaceBetweenTwoRectangles);
     // we draw the rectangles
     for (int i = 0; i < currentState.length; i++) {
       _drawRectangle(
-            Rectangle(
-                position: currentState[i].position,
-                length: currentState[i].length,
-                color: i==index? MyColor.yellow : MyColor.white,
-                value: currentState[i].value,
-                maxValue: maxValue,
-                label: currentState[i].label,
-                stateLabel: currentState[i].stateLabel),
-                canvas
-      );
+          Rectangle(
+              position: currentState[i].position,
+              length: currentState[i].length,
+              color: i == index ? MyColor.yellow : MyColor.white,
+              value: currentState[i].value,
+              maxValue: maxValue,
+              label: currentState[i].label,
+              stateLabel: currentState[i].stateLabel),
+          canvas,spaceBetweenTwoRectangles);
     }
 
     // draw current state label
     String stateLabel = currentState[0].stateLabel;
 
     _drawStateLabel(canvas, size, stateLabel);
-    }
+  }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
@@ -152,7 +148,7 @@ class MyStatePaint extends CustomPainter {
       text: title,
       style: titleTextStyle ?? textStyleBold,
     );
-    double x = totalWidth / 2 ;
+    double x = totalWidth / 2;
     double y = -40;
     // double y = -50;
     // double y = -60;
@@ -164,14 +160,14 @@ class MyStatePaint extends CustomPainter {
     textPainter.paint(
       canvas,
       Offset(
-        -textPainter.width / 2 ,
+        -textPainter.width / 2,
         -textPainter.height / 2,
       ),
     );
     canvas.restore();
   }
 
-  void _drawRectangle(Rectangle rect, Canvas canvas) {
+  void _drawRectangle(Rectangle rect, Canvas canvas,double spaceBetweenTwoRectangles) {
     // draw rectangle
     // Path path = Path();
     // double maxHeight = numberOfRactanglesToShow * (rectHeight + spaceBetweenTwoRectangles) -
@@ -186,7 +182,9 @@ class MyStatePaint extends CustomPainter {
 
     // draw rectangle
     Path path = Path();
-    double maxHeight = numberOfRactanglesToShow * (rectHeight + spaceBetweenTwoRectangles) - spaceBetweenTwoRectangles;
+    double maxHeight =
+        numberOfRactanglesToShow * (rectHeight + spaceBetweenTwoRectangles) -
+            spaceBetweenTwoRectangles;
     // define postitons of the four corner to draw the rectangle
     double x1 = 0,
         y1 = rect.position * (rectHeight + spaceBetweenTwoRectangles);
@@ -214,7 +212,7 @@ class MyStatePaint extends CustomPainter {
     );
     canvas.save();
     textPainter.layout();
-    canvas.translate(x2, y1 +3.5);
+    canvas.translate(x2, y1 + 3.5);
     // canvas.translate(x2, y1 + 9);
     textPainter.paint(
       canvas,
@@ -249,9 +247,9 @@ class MyStatePaint extends CustomPainter {
   }
 
   // draw the lines with the respective value based on the current maximum value
-  void _drawLines(Canvas canvas) {
+  void _drawLines(Canvas canvas,double spaceBetweenTwoRectangles) {
     double lastDigit = maxValue;
-    double p = 1;
+    double p = 1; 
     while (lastDigit >= 10) {
       lastDigit = lastDigit / 10.0;
       p *= 10;
@@ -265,12 +263,12 @@ class MyStatePaint extends CustomPainter {
     double posX = step;
     while (posX <= totalWidth) {
       double value = posX / maxLength! * maxValue;
-      _drawLine(canvas, posX, value.round());
+      _drawLine(canvas, posX, value.round(),spaceBetweenTwoRectangles);
       posX += step;
     }
   }
 
-  void _drawLine(Canvas canvas, double posX, int value) {
+  void _drawLine(Canvas canvas, double posX, int value,double spaceBetweenTwoRectangles) {
     Path path = Path();
     // define the two point of the line
     double x1 = posX, y1 = 0;

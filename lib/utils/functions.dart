@@ -1,8 +1,9 @@
 import 'dart:math' as math;
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:tournament_client/lib/bar_chart.widget.dart';
 import 'package:tournament_client/utils/mycolors.dart';
+
 
 List<Color> shuffleColorList() {
   final random = Random();
@@ -247,11 +248,13 @@ List<List<double>> generateNewData(List<List<double>> existingData) {
   int nbColumns = existingData[0].length;
 
   // Create a new 2D list to store the generated data
-  List<List<double>> newData = List.generate(nbRows, (index) => List<double>.filled(nbColumns, 0));
+  List<List<double>> newData =
+      List.generate(nbRows, (index) => List<double>.filled(nbColumns, 0));
 
   // Set initial values for the first row based on the existing data
   for (int j = 0; j < nbColumns; j++) {
-    newData[0][j] = existingData[0][j] * 0.00000001; // Adjust the multiplier as needed
+    newData[0][j] =
+        existingData[0][j] * 0.00000001; // Adjust the multiplier as needed
   }
 
   // Copy the last row from the existing data to the second row in the new data
@@ -275,11 +278,6 @@ List<List<double>> generateNewData(List<List<double>> existingData) {
   return newData;
 }
 
-
-
-
-
-
 List<List<double>> convertData(data) {
   print('data 2: $data');
   if (data.length == 2) {
@@ -292,4 +290,16 @@ List<List<double>> convertData(data) {
   print('convert data : $data ');
 
   return data;
+}
+
+
+List<String> listLabelGenerate() {
+  return List.generate(
+    30,
+    (index) => formatDate(
+      DateTime.now().add(
+        Duration(days: index),
+      ),
+    ),
+  );
 }
