@@ -70,6 +70,8 @@ class BarChartRace extends StatefulWidget {
   final int? index;
   final int? selectedIndex;
   final double? spaceBetweenTwoRectangles;
+  final double? offset_text;
+  final double? offset_title;
 
   const BarChartRace({
     Key? key,
@@ -87,6 +89,8 @@ class BarChartRace extends StatefulWidget {
     required this.title,
     required this.titleTextStyle,
     required this.spaceBetweenTwoRectangles,
+    required this.offset_text,
+    required this.offset_title,
   }) : super(key: key);
 
   @override
@@ -189,6 +193,8 @@ class _BarChartRaceState extends State<BarChartRace> {
                 currentState: currentData!,
                 numberOfRactanglesToShow: widget.numberOfRactanglesToShow,
                 rectHeight: widget.rectangleHeight,
+                offset_text: widget.offset_text!,
+                offset_title: widget.offset_title!,
                 spaceBetweenTwoRectangles:widget.spaceBetweenTwoRectangles!,
                 // TABLET
                 // rectHeight: 27.5,

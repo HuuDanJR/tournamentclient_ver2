@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tournament_client/lib/models/rectangle.dart';
 import 'package:tournament_client/utils/mycolors.dart';
+import 'package:tournament_client/utils/mystring.dart';
 
 class MyStatePaint extends CustomPainter {
   final List<Rectangle> currentState;
@@ -11,6 +12,8 @@ class MyStatePaint extends CustomPainter {
   final double totalWidth;
   final int numberOfRactanglesToShow;
   final double spaceBetweenTwoRectangles;
+  final double offset_text;
+  final double offset_title;
   final String title;
   final int? index;
   final TextStyle titleTextStyle;
@@ -29,6 +32,8 @@ class MyStatePaint extends CustomPainter {
     required this.totalWidth,
     required this.rectHeight,
     required this.spaceBetweenTwoRectangles,
+    required this.offset_text,
+    required this.offset_title,
     required this.title,
     this.index,
     required this.titleTextStyle,
@@ -62,11 +67,11 @@ class MyStatePaint extends CustomPainter {
   );
   final TextStyle textStyle = GoogleFonts.bebasNeue(
     color: MyColor.white,
-    fontSize: kIsWeb ? 29 : 24.0,
+    fontSize: kIsWeb ? 29.0 : 24.0,
   );
   final TextStyle textStyleLabel = GoogleFonts.bebasNeue(
     color: MyColor.red_text2,
-    fontSize: kIsWeb ? 29 : 24.0,
+    fontSize: kIsWeb ? 29.0 : 24.0,
   );
 
   final TextStyle textStyleDrawLine = GoogleFonts.nunito(
@@ -93,7 +98,7 @@ class MyStatePaint extends CustomPainter {
     // draw title if not null
     _drawTitle(canvas, title);
     // first we draw the line under the ractangles
-    _drawLines(canvas,spaceBetweenTwoRectangles);
+    _drawLines(canvas, spaceBetweenTwoRectangles);
     // we draw the rectangles
     for (int i = 0; i < currentState.length; i++) {
       _drawRectangle(
@@ -105,7 +110,8 @@ class MyStatePaint extends CustomPainter {
               maxValue: maxValue,
               label: currentState[i].label,
               stateLabel: currentState[i].stateLabel),
-          canvas,spaceBetweenTwoRectangles);
+          canvas,
+          spaceBetweenTwoRectangles,offset_text,offset_title);
     }
 
     // draw current state label
@@ -167,7 +173,12 @@ class MyStatePaint extends CustomPainter {
     canvas.restore();
   }
 
-  void _drawRectangle(Rectangle rect, Canvas canvas,double spaceBetweenTwoRectangles) {
+  void _drawRectangle(
+      Rectangle rect,
+      Canvas canvas,
+      double spaceBetweenTwoRectangles,
+      double offsetx_text,
+      double offsetx_title) {
     // draw rectangle
     // Path path = Path();
     // double maxHeight = numberOfRactanglesToShow * (rectHeight + spaceBetweenTwoRectangles) -
@@ -212,12 +223,13 @@ class MyStatePaint extends CustomPainter {
     );
     canvas.save();
     textPainter.layout();
-    canvas.translate(x2, y1 + 3.5);
+    canvas.translate(x2, y1 + offset_text);
+    // canvas.translate(x2, y1 + MyString.DEFAULT_OFFSETX_TEXT);
     // canvas.translate(x2, y1 + 9);
     textPainter.paint(
       canvas,
       const Offset(
-        5,
+        MyString.DEFAULT_OFFSETX,
         0,
       ),
     );
@@ -234,7 +246,8 @@ class MyStatePaint extends CustomPainter {
     );
     canvas.save();
     textPainter.layout();
-    canvas.translate(0 - 9, y1 + 3.5);
+    canvas.translate(0 - 9, y1 + offset_title);
+    // canvas.translate(0 - 9, y1 + MyString.DEFAULT_OFFSETX_TITLE);
     // canvas.translate(0 - 9, y1 + 9);
     textPainter.paint(
       canvas,
@@ -247,9 +260,9 @@ class MyStatePaint extends CustomPainter {
   }
 
   // draw the lines with the respective value based on the current maximum value
-  void _drawLines(Canvas canvas,double spaceBetweenTwoRectangles) {
+  void _drawLines(Canvas canvas, double spaceBetweenTwoRectangles) {
     double lastDigit = maxValue;
-    double p = 1; 
+    double p = 1;
     while (lastDigit >= 10) {
       lastDigit = lastDigit / 10.0;
       p *= 10;
@@ -263,12 +276,13 @@ class MyStatePaint extends CustomPainter {
     double posX = step;
     while (posX <= totalWidth) {
       double value = posX / maxLength! * maxValue;
-      _drawLine(canvas, posX, value.round(),spaceBetweenTwoRectangles);
+      _drawLine(canvas, posX, value.round(), spaceBetweenTwoRectangles);
       posX += step;
     }
   }
 
-  void _drawLine(Canvas canvas, double posX, int value,double spaceBetweenTwoRectangles) {
+  void _drawLine(
+      Canvas canvas, double posX, int value, double spaceBetweenTwoRectangles) {
     Path path = Path();
     // define the two point of the line
     double x1 = posX, y1 = 0;

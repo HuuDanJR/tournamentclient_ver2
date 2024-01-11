@@ -24,6 +24,8 @@ Widget barcharcustom(data) {
     framesPerSecond: 60,
     framesBetweenTwoStates: 30,
     spaceBetweenTwoRectangles: 22,
+    offset_text: 3.5,
+    offset_title: 3.5,
     numberOfRactanglesToShow: 10,
     title: "RANKING TOURNAMENT",
     columnsLabel: const [

@@ -21,7 +21,12 @@ class MyString{
      static const String update_station_status = '${BASE}update_station';
 
 
-     static const double DEFAULT_HEIGHT_LINE =kIsWeb?40:40;
-     static const double DEFAULT_SPACING_LING=kIsWeb?34:22;
+     static const double DEFAULT_HEIGHT_LINE = kIsWeb?44:44;
+     static const double DEFAULT_ROW = 10;
+     static const double DEFAULT_SPACING_LING = kIsWeb?34:22;
+     static const double DEFAULT_OFFSETX = 5.0;
+     static const double DEFAULT_OFFSETX_TEXT = 3.5;
+     static const double DEFAULT_OFFSETX_TITLE = 3.5;
+
 
 }

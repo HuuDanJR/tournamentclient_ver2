@@ -63,6 +63,8 @@ class BarChartRaceCopy extends StatefulWidget {
 
   /// the height of the rectangle
   final double rectangleHeight;
+  final double offset_text;
+  final double offset_title;
 
   const BarChartRaceCopy({
     Key? key,
@@ -77,6 +79,8 @@ class BarChartRaceCopy extends StatefulWidget {
     required this.columnsColor,
     required this.title,
     required this.titleTextStyle,
+    required this.offset_text,
+    required this.offset_title,
   }) : super(key: key);
 
   @override
@@ -125,10 +129,10 @@ class _BarChartRaceCopyState extends State<BarChartRaceCopy> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          child:const Icon(Icons.refresh),
-          onPressed: () {
-          _update();
-        }),
+            child: const Icon(Icons.refresh),
+            onPressed: () {
+              _update();
+            }),
         body: Container(
           height: height,
           width: width,
@@ -136,9 +140,11 @@ class _BarChartRaceCopyState extends State<BarChartRaceCopy> {
           child: LayoutBuilder(
             builder: (_, constraints) => CustomPaint(
               painter: MyStatePaint(
-                spaceBetweenTwoRectangles:kIsWeb? 32 : 22 ,
+                spaceBetweenTwoRectangles: kIsWeb ? 32 : 22,
                 currentState: currentData!,
                 numberOfRactanglesToShow: widget.numberOfRactanglesToShow,
+                offset_text: widget.offset_text!,
+                offset_title: widget.offset_title!,
                 rectHeight: widget.rectangleHeight,
                 maxValue: currentData![0].maxValue,
                 totalWidth: constraints.maxWidth * .9,
@@ -169,7 +175,8 @@ class _BarChartRaceCopyState extends State<BarChartRaceCopy> {
         double posDiff = (after[i].position - before[i].position) / nbFrames;
         double lengthDiff = (after[i].length - before[i].length) / nbFrames;
         double valueDiff = (after[i].value - before[i].value) / nbFrames;
-        double maxValueDiff = (after[i].maxValue - before[i].maxValue) / nbFrames;
+        double maxValueDiff =
+            (after[i].maxValue - before[i].maxValue) / nbFrames;
         // add the new differences
         currentData![i].length = before[i].length + lengthDiff * k;
         currentData![i].position = before[i].position + posDiff * k;
