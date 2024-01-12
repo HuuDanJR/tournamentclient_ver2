@@ -16,9 +16,12 @@ class AdminPage extends StatefulWidget {
 class _AdminPageState extends State<AdminPage> {
   IO.Socket? socket;
   final TextEditingController controllerName = TextEditingController(text: '');
-  final TextEditingController controllerNumber = TextEditingController(text: '');
-  final TextEditingController controllerPoint = TextEditingController(text: '0');
-  GlobalKey<RefreshIndicatorState> refreshKey = GlobalKey<RefreshIndicatorState>();
+  final TextEditingController controllerNumber =
+      TextEditingController(text: '');
+  final TextEditingController controllerPoint =
+      TextEditingController(text: '0');
+  GlobalKey<RefreshIndicatorState> refreshKey =
+      GlobalKey<RefreshIndicatorState>();
   Future<void> _refreshData() async {
     // Fetch and update your data from the server here
     // final updatedData = await service_api.listRanking();
@@ -51,6 +54,7 @@ class _AdminPageState extends State<AdminPage> {
 
   void emitEvent() {
     socket!.emit('eventFromClient2_force');
+    socket!.emit('eventFromClient_force');
   }
 
   final service_api = ServiceAPIs();
@@ -118,10 +122,13 @@ class _AdminPageState extends State<AdminPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  IconButton(onPressed: (){
-                    Navigator.of(context).pop();
-                  }, icon: Icon(Icons.arrow_back_ios,)),
-                  
+                  IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                      )),
                   ElevatedButton(
                       onPressed: () {
                         print('reset all for the 1st round');
@@ -140,7 +147,7 @@ class _AdminPageState extends State<AdminPage> {
                       },
                       child: textcustom(
                           text: 'REFRESH LIST',
-                          size:  14.0,
+                          size: 14.0,
                           color: MyColor.black_text)),
                   ElevatedButton(
                       onPressed: () {
@@ -149,9 +156,10 @@ class _AdminPageState extends State<AdminPage> {
                       },
                       child: textcustom(
                           text: 'REFRESH TABLET',
-                          size:  14.0,
+                          size: 14.0,
                           color: MyColor.black_text)),
-                  Image.asset('asset/image/logo_renew.png', width: 65.0, height: 65.0),
+                  Image.asset('asset/image/logo_renew.png',
+                      width: 65.0, height: 65.0),
                 ],
               ),
               SizedBox(

@@ -34,8 +34,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   IO.Socket? socket;
-  late StreamController<List<Map<String, dynamic>>> _streamController =
-      StreamController<List<Map<String, dynamic>>>.broadcast();
+  late StreamController<List<Map<String, dynamic>>> _streamController = StreamController<List<Map<String, dynamic>>>.broadcast();
   List<Map<String, dynamic>> stationData = [];
   final Map<String, AnimationController> _animationControllers = {};
   final controllerGetX = Get.put(MyGetXController());

@@ -54,9 +54,9 @@ class MyApp extends StatelessWidget {
         //           selectedIndex: 5),
         // home:const TournamentPage()
         // home:const SetupPage()
-        home: const AdminVerify()
+        // home: const AdminVerify()
         // home:const AdminPage()
-        // home:WelcomePage()
+        home:WelcomePage()
         // home: ContainerPage(url: 'http://localhost:8090',selectedIndex: MyString.DEFAULTNUMBER,),
         );
   }

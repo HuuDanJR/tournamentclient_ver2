@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tournament_client/admin_container.dart';
 import 'package:tournament_client/adminpage.dart';
 import 'package:tournament_client/containerpage.dart';
 import 'package:tournament_client/service/service_api.dart';
@@ -8,7 +9,7 @@ import 'package:tournament_client/utils/mystring.dart';
 import 'package:tournament_client/utils/showsnackbar.dart';
 import 'package:tournament_client/welcome.dart';
 import 'package:tournament_client/widget/text.dart';
-// import "dart:html" as html;
+import "dart:html" as html;
 
 class AdminVerify extends StatefulWidget {
   const AdminVerify({Key? key}) : super(key: key);
@@ -37,11 +38,16 @@ class _AdminVerifyState extends State<AdminVerify> {
 
     return Scaffold(
         // Your scaffold content
-      body: Container(
+        body: Container(
       height: height,
       width: width,
       decoration: const BoxDecoration(
-        image: DecorationImage(image: AssetImage('asset/bg.jpg',),fit: BoxFit.cover,filterQuality: FilterQuality.low),
+        image: DecorationImage(
+            image: AssetImage(
+              'asset/bg.jpg',
+            ),
+            fit: BoxFit.cover,
+            filterQuality: FilterQuality.low),
         // gradient: LinearGradient(
         //   begin: Alignment.topCenter,
         //   end: Alignment.bottomCenter,
@@ -70,7 +76,8 @@ class _AdminVerifyState extends State<AdminVerify> {
                 textcustom(text: 'LOGIN ADMIN', size: 18.0),
                 IconButton(
                     onPressed: () {
-                      // html.window.location.reload();
+                      html.window.location.reload();
+                      // setState(() {});
                     },
                     icon: Icon(Icons.refresh, color: MyColor.red_accent))
               ],
@@ -117,35 +124,15 @@ class _AdminVerifyState extends State<AdminVerify> {
               children: [
                 ElevatedButton(
                     onPressed: () {
-                      if (validateFields(
-                            controllerName,
-                            controllerPass,
-                          ) ==
-                          true) {
-                        if (controllerName.text == 'admin' &&
-                            controllerPass.text == 'vegas123') {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const AdminPage(),
-                          ));
-                        } else {
-                          showSnackBar(
-                              context: context,
-                              message:'Password or username not correct, please try again');
-                        }
-                      } else {
-                        showSnackBar(
-                            context: context,
-                            message: 'Please fill  password or username');
-                        // You can use a ScaffoldMessenger or other methods to display the error message.
-                      }
+                      navigateToPage(isTopRanking: true);
                     },
-                    child: textcustom(text: "SUBMIT")),
+                    child: textcustom(text: "TOP RANKING")),
+                SizedBox(width: MyString.padding08),
                 ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) => SetupPage()));
+                      navigateToPage(isTopRanking: false);
                     },
-                    child: textcustom(text: "SETUP")),
+                    child: textcustom(text: "REALTIME RANKING")),
               ],
             ),
             const SizedBox(height: 24.0),
@@ -165,17 +152,39 @@ class _AdminVerifyState extends State<AdminVerify> {
                     child: textcustom(text: "VIEW")),
                 ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => WelcomePage()));
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => WelcomePage()));
                     },
                     child: textcustom(text: "VIEW AS PLAYER")),
-                
               ],
             )
           ],
         ),
       ),
     ));
+  }
+
+  navigateToPage({isTopRanking}) {
+    if (validateFields(
+          controllerName,
+          controllerPass,
+        ) ==
+        true) {
+      if (controllerName.text == 'admin' && controllerPass.text == 'vegas123') {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>
+              isTopRanking == true ? AdminPage() : SetupPage(),
+        ));
+      } else {
+        showSnackBar(
+            context: context,
+            message: 'Password or username not correct, please try again');
+      }
+    } else {
+      showSnackBar(
+          context: context, message: 'Please fill  password or username');
+      // You can use a ScaffoldMessenger or other methods to display the error message.
+    }
   }
 
   void openLoginDialog(

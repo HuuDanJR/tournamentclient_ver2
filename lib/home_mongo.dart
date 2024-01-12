@@ -135,46 +135,25 @@ class _MyHomePageMongoState extends State<MyHomePageMongo> {
                     children: [
                       // Text('data')
                       BarChartRace(
-                        // selectedIndex: widget.selectedIndex,
                         selectedIndex: widget.selectedIndex,
-                        spaceBetweenTwoRectangles: MyString.DEFAULT_SPACING_LING,
-                        rectangleHeight: MyString.DEFAULT_HEIGHT_LINE,
-                        offset_text: 3.5,
-                        offset_title: 3.5,
-                        // offset_text: detectResolutionOffsetX(input: numbers.length),
-                        // offset_title: detectResolutionOffsetX(input:numbers.length),
-                        index: detectInt(numbers, times,widget.selectedIndex!.toDouble(), numbers),
-                        // index: detectInt(widget.selectedIndex!.toDouble(), numbers),
-                        // selectedIndex: 1,index: 3,
-                        data: convertData(dataField2),
-                        // data: convertData(dataField2),
-                        initialPlayState: true,
-                        framesPerSecond: 40.0,
-                        
-                        framesBetweenTwoStates: 40,
-                        // framesPerSecond: 64.0,
-                        // framesBetweenTwoStates: 64,
+                        offset_text: detectResolutionOffsetX(input: numbers.length),
+                        offset_title: detectResolutionOffsetX(input: numbers.length),
+                        spaceBetweenTwoRectangles:detectResolutionSpacing(input:numbers.length),
+                        rectangleHeight: detectResolutionHeight(input:numbers.length),
                         numberOfRactanglesToShow: numbers.length,
+                        index: detectInt(numbers, times,widget.selectedIndex!.toDouble(), numbers),
+                        data: convertData(dataField2),
+                        initialPlayState: true,
+                        framesPerSecond: 66.0,
+                        framesBetweenTwoStates: 65,
                         title: "",
-                        // title: "TOURNAMENT LEADER BOARD",
                         columnsLabel: updatedNames,
-                        // columnsLabel: names,
                         statesLabel:listLabelGenerate(),
                         titleTextStyle: GoogleFonts.nunitoSans(
                           color: Colors.white,
                           fontSize: kIsWeb ? 48 : 48.0,
                         ),
                       ),
-                      // Positioned(
-                      //     bottom: 12,
-                      //     right: 12,
-                      //     child: widget.selectedIndex == 111111
-                      //         ? Container()
-                      //         : Text('YOU ARE PLAYER ${widget.selectedIndex}',
-                      //             style: const TextStyle(
-                      //               color: MyColor.white,
-                      //               fontSize: 24,
-                      //             ))),
                     ],
                   ),
                 );
